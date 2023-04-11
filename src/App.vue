@@ -1,23 +1,19 @@
-<template>
+<template lang="zh">
     <div>
-        <img src="./assets/logo.png" alt="logo">
-        <School></School>
-        <Student></Student>
+        <Student/>
+        <hr>
+        <School/>
     </div>
 </template>
-
 <script>
-// 引入组件
-import School from './components/School'
 import Student from './components/Student'
+import School from './components/School'
 
 export default {
     name: 'App',
-    components: {
-        School,
-        Student
-    }
+    components: {Student, School},
 }
 </script>
-
-<style></style>
+<style lang="zh">
+    
+</style>

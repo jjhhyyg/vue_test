@@ -1,36 +1,28 @@
 <template>
-    <!-- 组件的结构 -->
-    <div class="demo">
-        <h2>Student name: {{ name }}</h2>
-        <h2>Student address: {{ address }}</h2>
-        <button @click="showName">点我提示学生姓名</button>
+    <div class="student">
+        <h2 @click="showName">学生名称: {{ name }}</h2>
+        <h2>学生性别: {{ gender }}</h2>
+        <h2>x = {{ x }}, y = {{ y}}</h2>
     </div>
 </template>
-
 <script>
-// 组件交互相关的代码（数据、方法等）
-export default{
-    name: "StudentInfo",
+// 引入一个混合
+import {mixin, mixin2} from '../mixin'
+export default {
+    name: 'StudentItem',
     data() {
         return {
-            name: "HYY",
-            address: "九斋",
-        };
-    },
-    methods: {
-        showName() {
-            alert(this.name)
+            name: 'Rose',
+            gender: 'female'
         }
     },
-};
-</script>
-
-<style>
-/* 组件的样式 */
-.demo {
-    background-color: orange;
+    mixins: [mixin, mixin2]
+    
 }
-button {
-    background-color: thistle;
+</script>
+<style>
+.student {
+    background-color: orange;
+    ;
 }
 </style>
