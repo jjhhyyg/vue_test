@@ -1,7 +1,8 @@
 <template>
     <li>
         <label>
-            <input type="checkbox" :checked="todo.completed" @change="handleCheck(todo.id)" />
+            <!-- <input type="checkbox" :checked="todo.completed" @change="handleCheck(todo.id)" /> -->
+            <input type="checkbox" v-model="todo.completed"/>
             <span>{{ todo.content }}</span>
         </label>
         <button class="btn btn-danger" style="display:none">删除</button>
@@ -10,14 +11,7 @@
 <script>
 export default {
     name: 'TodoItem',
-    props: ['todo', 'checkTodoItem'],
-    methods: {
-        handleCheck(id) {
-            // 通知App组件将对应的todo对象的done值取反
-            this.checkTodoItem(id)
-        },
-
-    }
+    props: ['todo'],
 }
 </script>
 <style scoped>

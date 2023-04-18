@@ -4,7 +4,7 @@
             <div class="todo-container">
                 <div class="todo-wrap">
                     <TodoInsertBar :addTodoItem="addTodoItem"/>
-                    <TodoList :todos="todos" :checkTodoItem="checkTodoItem"/>
+                    <TodoList :todos="todos"/>
                     <TodoListFooter/>
                 </div>
             </div>
@@ -33,12 +33,6 @@ export default {
         addTodoItem(todoObj){
             this.todos.unshift(todoObj)
         },
-        // 勾选or取消勾选一个todo
-        checkTodoItem(id){
-            this.todos.forEach((todo)=>{
-                if(todo.id == id){todo.completed = !todo.completed}
-            })
-        }
     }
 }
 </script>
