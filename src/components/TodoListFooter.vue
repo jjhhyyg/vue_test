@@ -4,7 +4,7 @@
             <input type="checkbox" />
         </label>
         <span>
-            <span>已完成0</span> / 全部2
+            <span>已完成{{ completedTodoNumber }}</span> / 全部{{ todos.length }}
         </span>
         <button class="btn btn-danger">清除已完成任务</button>
     </div>
@@ -12,6 +12,15 @@
 <script>
 export default {
     name: 'TodoListFooter',
+    props: ['todos'],
+    computed: {
+        completedTodoNumber() {
+            // 法1
+            // return this.todos.filter(todo => todo.completed == true).length
+            // 法2：用reduce实现条件统计，注意括号！
+            return this.todos.reduce((pre, curr) => (pre + (curr.completed ? 1 : 0)), 0)
+        }
+    }
 }
 </script>
 <style scoped>

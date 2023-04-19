@@ -5,7 +5,7 @@
                 <div class="todo-wrap">
                     <TodoInsertBar :addTodoItem="addTodoItem"/>
                     <TodoList :todos="todos" :checkTodoItem="checkTodoItem" :deleteTodoItem="deleteTodoItem"/>
-                    <TodoListFooter/>
+                    <TodoListFooter :todos="todos"/>
                 </div>
             </div>
         </div>
