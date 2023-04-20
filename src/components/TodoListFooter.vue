@@ -7,13 +7,13 @@
         <span>
             <span>已完成{{ completedTodoNumber }}</span> / 全部{{ totalTodoNumber }}
         </span>
-        <button class="btn btn-danger">清除已完成任务</button>
+        <button class="btn btn-danger" @click="clearAll">清除已完成任务</button>
     </div>
 </template>
 <script>
 export default {
     name: 'TodoListFooter',
-    props: ['todos', 'checkAllTodoItem'],
+    props: ['todos', 'checkAllTodoItem', 'clearAllTodoItem'],
     computed: {
         isAll: {
             get() {
@@ -33,6 +33,11 @@ export default {
             return this.todos.reduce((pre, curr) => (pre + (curr.completed ? 1 : 0)), 0)
         }
     },
+    methods: {
+        clearAll(){
+            this.clearAllTodoItem()
+        }
+    }
 }
 </script>
 <style scoped>

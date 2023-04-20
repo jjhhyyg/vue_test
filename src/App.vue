@@ -5,7 +5,7 @@
                 <div class="todo-wrap">
                     <TodoInsertBar :addTodoItem="addTodoItem"/>
                     <TodoList :todos="todos" :checkTodoItem="checkTodoItem" :deleteTodoItem="deleteTodoItem"/>
-                    <TodoListFooter :todos="todos" :checkAllTodoItem="checkAllTodoItem"/>
+                    <TodoListFooter :todos="todos" :checkAllTodoItem="checkAllTodoItem" :clearAllTodoItem="clearAllTodoItem"/>
                 </div>
             </div>
         </div>
@@ -46,6 +46,9 @@ export default {
         // 全选 or 全不选
         checkAllTodoItem(checked){
             this.todos.forEach(todo => todo.completed = checked)
+        },
+        clearAllTodoItem(){
+            this.todos = this.todos.filter(todo=>!todo.completed)
         }
     }
 }
