@@ -1,52 +1,105 @@
-<template lang="zh">
-    <div>
-        <h1>{{msg}}学生姓名是：{{studentName}}</h1>
-        <!-- 组件也可以写点击事件 -->
-        <!-- @click.native告诉vue是原生事件，将把这个触发事件交给Student组件最外层的div去管理 -->
-        <Student ref="student" @click.native="show"/>
-        <hr>
-        <School :getSchoolName="getSchoolName"/>
+<template>
+    <div id="root">
+        <div class="todo-container">
+            <div class="todo-wrap">
+                <TodoInsertBar @addTodoItem="addTodoItem" />
+                <TodoList :todos="todos" :checkTodoItem="checkTodoItem" :deleteTodoItem="deleteTodoItem" />
+                <TodoListFooter :todos="todos" @checkAllTodoItem="checkAllTodoItem" @clearAllTodoItem="clearAllTodoItem" />
+            </div>
+        </div>
     </div>
 </template>
 <script>
-import Student from './components/Student'
-import School from './components/School'
+import TodoInsertBar from './components/TodoInsertBar';
+import TodoList from './components/TodoList';
+import TodoListFooter from './components/TodoListFooter';
 
 export default {
     name: 'App',
-    components: {Student, School},
-    methods: {
-        getSchoolName(name){
-            console.log('App 收到了学校名：' + name)
-        },
-        getStudentName(name){
-            this.studentName = name
-        },
-        m1(){
-            console.log('test1事件被触发了')
-        },
-        show(){
-            alert(123)
-        }
-    },
+    components: { TodoInsertBar, TodoList, TodoListFooter },
     data() {
         return {
-            msg: '你好啊！',
-            studentName: ''
+            todos: JSON.parse(localStorage.getItem('todos')) || []
         }
     },
-    mounted(){
-        // 第二个参数不能用function命名，否则其中的this指的是Student组件，箭头函数没有自己的this，往外找就找到了App组件的实例对象
-        // 谁触发的事件，回调函数中的this指的就是那个组件
-        // 不推荐这种写法
-        // this.$refs.student.$on('sonToFather', (name)=>{
-        //     this.studentName = name
-        // })
-        // 推荐写法
-        this.$refs.student.$on('sonToFather', this.getStudentName)
+    methods: {
+        // 添加一个todo
+        addTodoItem(todoObj) {
+            this.todos.unshift(todoObj)
+        },
+        // 勾选or取消勾选一个todo
+        checkTodoItem(id) {
+            this.todos.forEach((todo) => {
+                if (todo.id == id) { todo.completed = !todo.completed }
+            })
+        },
+        // 删除一个todo
+        deleteTodoItem(id) {
+            this.todos = this.todos.filter(todo => todo.id !== id)
+        },
+        // 全选 or 全不选
+        checkAllTodoItem(checked) {
+            this.todos.forEach(todo => todo.completed = checked)
+        },
+        clearAllTodoItem() {
+            this.todos = this.todos.filter(todo => !todo.completed)
+        }
+    },
+    watch: {
+        todos: {
+            // 开启深度监视才能监视到todoItem状态的变化
+            deep: true,
+            handler(value) {
+                localStorage.setItem('todos', JSON.stringify(value))
+            }
+        }
     }
 }
 </script>
-<style lang="zh">
-    
+<style>
+/*base*/
+body {
+    background: #fff;
+}
+
+.btn {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #da4f49;
+    border: 1px solid #bd362f;
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #bd362f;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+
+/*app*/
+.todo-container {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.todo-container .todo-wrap {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 </style>
