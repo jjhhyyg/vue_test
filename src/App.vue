@@ -1,11 +1,10 @@
 <template lang="zh">
     <div>
-        <!-- 第一种写法 -->
-        <!-- 给组件实例对象vc上绑定一个事件，事件名叫sonToFather，触发这个事件后，demo函数就被调用 -->
-        <!-- 通过父组件给子组件绑定一个自定义事件实现：子给父传递数据 -->
-        <Student @sonToFather="getStudentName" @test1="m1"/>
+        <h1>{{msg}}学生姓名是：{{studentName}}</h1>
+        <!-- 组件也可以写点击事件 -->
+        <!-- @click.native告诉vue是原生事件，将把这个触发事件交给Student组件最外层的div去管理 -->
+        <Student ref="student" @click.native="show"/>
         <hr>
-        <!-- 通过父组件给子组件传递函数类型的props实现：子给父传递数据 -->
         <School :getSchoolName="getSchoolName"/>
     </div>
 </template>
@@ -21,12 +20,31 @@ export default {
             console.log('App 收到了学校名：' + name)
         },
         getStudentName(name){
-            console.log('demo被调用了!', '名字为: ' + name)
+            this.studentName = name
         },
         m1(){
             console.log('test1事件被触发了')
+        },
+        show(){
+            alert(123)
         }
     },
+    data() {
+        return {
+            msg: '你好啊！',
+            studentName: ''
+        }
+    },
+    mounted(){
+        // 第二个参数不能用function命名，否则其中的this指的是Student组件，箭头函数没有自己的this，往外找就找到了App组件的实例对象
+        // 谁触发的事件，回调函数中的this指的就是那个组件
+        // 不推荐这种写法
+        // this.$refs.student.$on('sonToFather', (name)=>{
+        //     this.studentName = name
+        // })
+        // 推荐写法
+        this.$refs.student.$on('sonToFather', this.getStudentName)
+    }
 }
 </script>
 <style lang="zh">
