@@ -3,18 +3,10 @@
         <!-- 第一种写法 -->
         <!-- 给组件实例对象vc上绑定一个事件，事件名叫sonToFather，触发这个事件后，demo函数就被调用 -->
         <!-- 通过父组件给子组件绑定一个自定义事件实现：子给父传递数据 -->
-        <!-- <Student v-on:sonToFather="getStudentName"/> -->
-        <!-- 只触发一次 -->
-        <!-- <Student v-on:sonToFather.once="getStudentName"/> -->
-
+        <Student @sonToFather="getStudentName" @test1="m1"/>
         <hr>
-        <!-- 第二种写法 -->
         <!-- 通过父组件给子组件传递函数类型的props实现：子给父传递数据 -->
         <School :getSchoolName="getSchoolName"/>
-        
-        <!-- 第三种写法 -->
-        <!-- ref绑定，灵活性强=》见mounted钩子 -->
-        <Student ref="student"/>
     </div>
 </template>
 <script>
@@ -30,16 +22,10 @@ export default {
         },
         getStudentName(name){
             console.log('demo被调用了!', '名字为: ' + name)
+        },
+        m1(){
+            console.log('test1事件被触发了')
         }
-    },
-    mounted() {
-        // 三秒钟之后才可以触发事件
-        // setTimeout(() => {
-        //     this.$refs.student.$on('sonToFather', this.getStudentName)
-        // }, 3000)
-
-        // 只触发一次事件
-        this.$refs.student.$once('sonToFather', this.getStudentName)
     },
 }
 </script>
