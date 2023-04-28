@@ -14,6 +14,7 @@
   </div>
 </template>
 <script>
+import PubSub from "pubsub-js"
 import TodoInsertBar from "./components/TodoInsertBar"
 import TodoList from "./components/TodoList"
 import TodoListFooter from "./components/TodoListFooter"
@@ -25,6 +26,7 @@ export default {
   data() {
     return {
       todos: JSON.parse(localStorage.getItem("todos")) || [],
+      pubId: "",
     }
   },
   methods: {
@@ -41,7 +43,7 @@ export default {
       })
     },
     // 删除一个todo
-    deleteTodoItem(id) {
+    deleteTodoItem(_, id) {
       this.todos = this.todos.filter((todo) => todo.id !== id)
     },
     // 全选 or 全不选
@@ -63,12 +65,12 @@ export default {
   },
   mounted() {
     this.$bus.$on(CHECK_TODO_ITEM, this.checkTodoItem)
-    this.$bus.$on(DELETE_TODO_ITEM, this.deleteTodoItem)
+    this.pubId = PubSub.subscribe(DELETE_TODO_ITEM, this.deleteTodoItem)
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.$bus.$off(CHECK_TODO_ITEM)
-    this.$bus.$off(DELETE_TODO_ITEM)
-  }
+    PubSub.unsubscribe(this.pubId)
+  },
 }
 </script>
 <style>
