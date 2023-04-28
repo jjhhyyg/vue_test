@@ -6,14 +6,27 @@
         :checked="todo.completed"
         @change="handleCheck(todo.id)"
       />
-      <span>{{ todo.content }}</span>
+      <span v-show="!todo.isEdit">{{ todo.content }}</span>
+      <input
+        type="text"
+        :value="todo.content"
+        v-show="todo.isEdit"
+        @blur="handleBlur(todo, $event)"
+        @keyup.enter="handleBlur(todo, $event)"
+        ref="inputEdit"
+      />
     </label>
     <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+    <button v-show="!todo.isEdit" class="btn btn-edit" @click="handleEdit(todo)">编辑</button>
   </li>
 </template>
 <script>
-import { CHECK_TODO_ITEM, DELETE_TODO_ITEM } from "@/config/constants"
-import PubSub from "pubsub-js";
+import {
+  CHECK_TODO_ITEM,
+  DELETE_TODO_ITEM,
+  UPDATE_TODO_ITEM,
+} from "@/config/constants"
+import PubSub from "pubsub-js"
 export default {
   name: "TodoItem",
   props: ["todo"],
@@ -25,7 +38,25 @@ export default {
     },
     // 删除
     handleDelete(id) {
-        PubSub.publish(DELETE_TODO_ITEM, id)
+      PubSub.publish(DELETE_TODO_ITEM, id)
+    },
+    // 编辑
+    handleEdit(todoItem) {
+      todoItem.isEdit = true
+      // $nextTick中的回调函数会在dom元素更新之后再执行
+      this.$nextTick(()=>{
+        this.$refs.inputEdit.focus()
+      })
+    },
+    // 失去焦点
+    handleBlur(todoItem, e) {
+      todoItem.isEdit = false
+      if(e.target.value.trim() != ''){
+        this.$bus.$emit(UPDATE_TODO_ITEM, todoItem.id, e.target.value)  
+      }
+      else{
+        alert("todo不能为空！")
+      }
     },
   },
 }

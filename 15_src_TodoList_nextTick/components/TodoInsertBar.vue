@@ -19,7 +19,7 @@ export default {
             }
             else {
                 // 将用户的输入包装成一个todo对象
-                const todoObj = { id: nanoid(), content: this.content, completed: false }
+                const todoObj = { id: nanoid(), content: this.content, completed: false, isEdit: false }
                 this.$emit('addTodoItem', todoObj)
                 this.content = ''
             }
