@@ -14,7 +14,7 @@ export default {
   },
   methods:{
     getInfo(){
-      axios.get("http://localhost:8080/users/").then(
+      axios.get("http://localhost:8080/hhh/users").then(
         response => {
           console.log(response.data)
         },
